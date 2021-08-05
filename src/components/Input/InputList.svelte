@@ -18,16 +18,16 @@
   export const hide = () => visible = false;
   export const toggle = () => visible = !visible;
   export const select = (index) => {
-    if (typeof index === "number") focused = index;
-    if (focused === -1) {
+    if (typeof index === "number")
+      focused = index;
+    if (focused === -1 || selected === focused)
       return false;
-    }
-    if (selected !== focused) {
-      $value = list[focused];
-      dispatch("select", {index, value: $value});
-      selected = focused;
-      return $value;
-    }
+    
+    $value = list[focused];
+    dispatch("select", {index, value: $value});
+    selected = focused;
+    return $value;
+    
   };
 
   export const offsetFocus = (add) => {
@@ -41,7 +41,7 @@
 
   state.subscribe( ({name, event}) => {
     if (name in eventActions)
-      eventActions[name]({ visible, focused, selected, show, hide, toggle, offsetFocus }, event);
+      eventActions[name]({ visible, focused, selected, show, hide, select, toggle, offsetFocus }, event);
   });
 </script>
 
