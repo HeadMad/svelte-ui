@@ -14,7 +14,7 @@
 
   const state = writable({name: 'blur'});
   setContext('inputState', state);
-
+  
   const inputValue = writable(value);
   setContext('inputValue', inputValue);
   inputValue.subscribe(newVal => value = newVal);

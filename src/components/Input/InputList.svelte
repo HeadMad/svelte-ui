@@ -1,14 +1,15 @@
 <script>
   import { getContext, createEventDispatcher } from "svelte";
-
+  import { eventActions } from './actions.js';
   export let list = [];
 
   let selected = -1;
   let focused = -1;
   let visible = true;
 
-  const This = this;
   const dispatch = createEventDispatcher();
+  const value = getContext("inputValue");
+  const state = getContext("inputState");
 
   $: list = Array.from(new Set(list));
   $: selected = focused = list.indexOf($value);
@@ -16,16 +17,14 @@
   export const show = () => visible = true;
   export const hide = () => visible = false;
   export const toggle = () => visible = !visible;
-  export const isVisible = () => visible;
   export const select = (index) => {
     if (typeof index === "number") focused = index;
     if (focused === -1) {
-      // dispatch("enter");
       return false;
     }
     if (selected !== focused) {
       $value = list[focused];
-      // dispatch("select");
+      dispatch("select", {index, value: $value});
       selected = focused;
       return $value;
     }
@@ -40,26 +39,9 @@
     return newIndex;
   };
 
-  const stateActions = {
-    blur() {
-      hide();
-    },
-
-    focus() {
-      console.log(This);
-    },
-
-    click() {
-      toggle();
-    }
-  };
-
-  const value = getContext("inputValue");
-  const state = getContext("inputState");
-
   state.subscribe( ({name, event}) => {
-    if (name in stateActions)
-      stateActions[name](event);
+    if (name in eventActions)
+      eventActions[name]({ visible, focused, selected, show, hide, toggle, offsetFocus }, event);
   });
 </script>
 
@@ -74,7 +56,14 @@ class:input__list_visible={visible}
       class:input__item_selected={index === selected}
       class:input__item_focused={index === focused}
     >
-      <slot {item} {index}>{item}</slot>
+      <slot
+        {item}
+        {index}
+        {visible}
+
+        focused={index === focused}
+        selected={index === selected}
+      >{item}</slot>
     </li>
   {/each}
 </ul>
