@@ -14,9 +14,10 @@
 
 <!-- <AddRowForm bind:this={addForm} />
 <button on:click={addForm.show}>Show</button> -->
-{value} <br>
-<Input bind:value label="Awesome Input">
-  {#if items.length}<InputList list={items} let:item>:: {item} </InputList>{/if}
+<Input {value} label="Awesome Input">
+  {#if items.length}
+  <InputList list={items} let:item>Пункт {item} </InputList>
+  {/if}
 </Input>
 
 <style>

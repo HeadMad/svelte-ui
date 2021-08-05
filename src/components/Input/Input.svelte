@@ -12,17 +12,19 @@
   export let pattern = '';
   export let value = '';
 
+  const state = writable({name: 'blur'});
+  setContext('inputState', state);
+
   const inputValue = writable(value);
   setContext('inputValue', inputValue);
   inputValue.subscribe(newVal => value = newVal);
   
   let control;
+  let input_focused = false;
+
   export const focus = () => control.focus();
   export const blur = () => control.blur();
   
-  let input_focused = false;
-
-  $: input__label_top = value || input_focused;
   $: if (control) control.readOnly = Boolean(readonly);
 
   onMount(() => {
@@ -31,6 +33,23 @@
     if (pattern) control.pattern = pattern;
   });
 
+  function onFocus(event) {
+    $state = {name: 'focus', event};
+    input_focused = true;
+  }
+  
+  function onBlur(event) {
+    $state = {name: 'blur', event};
+    input_focused = false;
+  }
+
+  function onClick(event) {
+    $state = {name: 'click', event};
+  }
+  
+  function onKeydown(event) {
+    $state = {name: 'keydown', event};
+  }
 </script>
 
 <label
@@ -47,9 +66,11 @@ style="width: {width}"
   
   class="input__control"
   
-  on:focus={ () => input_focused = true }
-  on:blur={ () => input_focused = false }
-  
+  on:focus={ onFocus }
+  on:blur={ onBlur }
+  on:click={ onClick }
+  on:keydown={ onKeydown }
+
   on:blur
   on:click
   on:focus
@@ -59,8 +80,8 @@ style="width: {width}"
 
   {#if label}
   <span
-  class:input__label_top
   class="input__label"
+  class:input__label_top={ value || input_focused }
   >{label}</span>
   {/if}
   <slot />
