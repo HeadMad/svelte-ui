@@ -1,7 +1,11 @@
 <script>
   import { getContext, createEventDispatcher } from "svelte";
-  import { eventActions } from './actions.js';
+  import createEventActions from './listEventActions.js';
+
   export let list = [];
+  export let keyActions;
+
+  const eventActions = createEventActions(keyActions);
 
   let selected = -1;
   let focused = -1;
@@ -40,8 +44,17 @@
   };
 
   state.subscribe( ({name, event}) => {
-    if (name in eventActions)
-      eventActions[name]({ visible, focused, selected, show, hide, select, toggle, offsetFocus }, event);
+    if (name in eventActions) {
+      const listInstance = {
+        hide, show, toggle,
+        select, visible, focused,
+        selected, offsetFocus
+      };
+      const actionResponse = eventActions[name]({list: listInstance, event});
+      
+      if (typeof actionResponse === 'function') 
+        actionResponse({ value: $value,  dispatch });
+    }
   });
 </script>
 

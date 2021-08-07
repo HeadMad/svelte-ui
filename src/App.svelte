@@ -16,7 +16,12 @@
 <button on:click={addForm.show}>Show</button> -->
 <Input {value} label="Awesome Input">
   {#if items.length}
-  <InputList list={items} let:item>Пункт {item} </InputList>
+  <InputList
+    keyActions={{Escape({list}) {list.toggle()}}}
+    list={items}
+    on:enter={ (e) => { items = items.concat(e.detail.value) }}
+    let:item
+  >Пункт {item} </InputList>
   {/if}
 </Input>
 

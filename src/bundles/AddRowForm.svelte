@@ -21,8 +21,7 @@
       editable
       label="Наименование"
       list={typeList}
-      bind:this={type}
-      bind:value={typeValue}
+      bind:value={ typeValue }
       on:enter={ () => {
         if (typeValue)
           typeList = typeList.concat(typeValue);
@@ -33,7 +32,6 @@
       label="Размер"
       width="50px"
       value="M"
-      bind:this={type}
       list={ sizeList }
       on:enter={() => { if (sizeValue) sizeList = sizeList.concat(sizeValue); }}
     />
