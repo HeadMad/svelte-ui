@@ -4,17 +4,18 @@
   import Input from './components/Input/Input.svelte';
   import InputList from './components/Input/InputList.svelte';
 
-  // import AddRowForm from "./bundles/AddRowForm.svelte";
+  import AddRowForm from "./bundles/AddRowForm.svelte";
   let addForm;
   // let value;
   let items = ["Hello", "Dolly", "How", 'Hello'];
   let value='some';
   onMount(() => {});
+
 </script>
 
-<!-- <AddRowForm bind:this={addForm} />
-<button on:click={addForm.show}>Show</button> -->
-<Input {value} label="Awesome Input">
+<AddRowForm bind:this={addForm} />
+<button on:click={addForm.show}>Show</button>
+<!-- <Input {value} label="Awesome Input">
   {#if items.length}
   <InputList
     keyActions={{Escape({list}) {list.toggle()}}}
@@ -23,7 +24,7 @@
     let:item
   >Пункт {item} </InputList>
   {/if}
-</Input>
+</Input> -->
 
 <style>
 </style>

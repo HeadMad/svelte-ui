@@ -10,6 +10,18 @@
   let typeList = ['Трусы', 'Колготки', 'Носки', 'Бюстгалтер', 'Трусы', ];
   let sizeList = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
+  const keyActions = {
+    Delete({ list: {focused}, event }) {
+      if (focused !== -1 && event.ctrlKey)
+        return ({dispatch}) => {
+          event.preventDefault();
+          dispatch('delete', {index: focused, value: typeList[focused]});
+          typeList.splice(focused, 1);
+          typeList = typeList;
+        }
+    }
+  }
+
 
 </script>
 
@@ -18,22 +30,24 @@
     <h1>Добавление товара</h1>
     <Input label="Штрихкод" value="1324768450" />
     <Select
+      { keyActions }
       editable
       label="Наименование"
       list={typeList}
       bind:value={ typeValue }
       on:enter={ () => {
+        console.log(typeList)
         if (typeValue)
           typeList = typeList.concat(typeValue);
-        } }
-      />
-      <Select
+        }
+      }
+    />
+    <Select
       on:keydown={() => {console.log('keydown')}}
       label="Размер"
       width="50px"
       value="M"
       list={ sizeList }
-      on:enter={() => { if (sizeValue) sizeList = sizeList.concat(sizeValue); }}
     />
 
   </div>
