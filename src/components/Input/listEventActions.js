@@ -1,7 +1,7 @@
 import keyActions from './listKeyActions.js';
 
 
-export default (userKeyActions) => {
+export const createEventActions = (userKeyActions) => {
   if (userKeyActions)
     Object.assign(keyActions, userKeyActions);
 

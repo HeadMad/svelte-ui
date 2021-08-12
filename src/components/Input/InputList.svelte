@@ -1,9 +1,9 @@
 <script>
   import { getContext, createEventDispatcher } from "svelte";
-  import createEventActions from './listEventActions.js';
+  import { createEventActions } from './listEventActions.js';
 
   export let list = [];
-  export let keyActions;
+  export let keyActions = {};
 
   const eventActions = createEventActions(keyActions);
 
@@ -15,7 +15,6 @@
   const value = getContext("inputValue");
   const state = getContext("inputState");
 
-  $: list = Array.from(new Set(list));
   $: selected = focused = list.indexOf($value);
 
   export const show = () => visible = true;
@@ -43,21 +42,20 @@
     return newIndex;
   };
 
-  state.subscribe( ({name, event}) => {
+  state.subscribe(({ name, event }) => {
     if (name in eventActions) {
       const listInstance = {
-        hide, show, toggle,
-        select, visible, focused,
-        selected, offsetFocus
+        hide, show, toggle, select, offsetFocus,
+        visible, focused, selected
       };
-      const actionResponse = eventActions[name]({list: listInstance, event});
+      const actionResponse = eventActions[name]({ list: listInstance, event });
       
       if (typeof actionResponse === 'function') 
-        actionResponse({ value: $value,  dispatch });
+        actionResponse({ items: list, dispatch });
     }
   });
 </script>
-
+{#if list.length}
 <ul
 class="input__list"
 class:input__list_visible={visible}
@@ -80,6 +78,7 @@ class:input__list_visible={visible}
     </li>
   {/each}
 </ul>
+{/if}
 
 <style>
   .input__list {

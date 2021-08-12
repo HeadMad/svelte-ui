@@ -7,22 +7,45 @@
   export let list  = [];
   export let label = '';
   export let width = 'auto';
-  export let keyActions;
+
+  const keyActions = {
+
+    Delete({ list: {focused}, event }) {
+    if (focused !== -1 && event.ctrlKey)
+      return ({ items, dispatch }) => {
+        event.preventDefault();
+        dispatch('delete', {index: focused, value: items[focused]});
+      }
+  },
+
+  }
+
+  function onEnter() {
+    console.log(list);
+    if (value && !list.includes(value))
+      list = [value, ...list];
+  }
+
+  function onDelete({ detail: {index} }) {
+    list.splice(index, 1);
+    list = list;
+  }
+
+
 
 </script>
 
 <Input
-  { value }
+  bind:value
   { label }
   { width }
   readonly={!editable}
 >
-  {#if list.length}
   <InputList
-    { list }
     { keyActions }
+    { list }
+    on:delete={ onDelete }
+    on:enter={ onEnter }
     on:select
-    on:input
   />
-  {/if}
 </Input>

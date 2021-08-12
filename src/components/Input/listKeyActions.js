@@ -1,4 +1,4 @@
-const arrowAction = (add) => ({list, event}) => {
+const arrowAction = (add) => ({ list, event }) => {
   event.preventDefault();
   if (!list.visible) {
     list.show();
@@ -13,12 +13,12 @@ export default {
   ArrowUp: arrowAction(-1),
   ArrowDown: arrowAction(1),
 
-  Enter({list}) {
+  Enter({ list, event }) {
     if (list.select() !== false)
       list.hide();
     else {
       list.show();
-      return ({dispatch, value}) => dispatch('enter', {value});
+      return ({ dispatch }) => dispatch('enter', {value: event.target.value});
     }
   },
 };

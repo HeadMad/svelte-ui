@@ -3,24 +3,14 @@
   import Select from '../components/Select/Select.svelte';
   import Input from '../components/Input/Input.svelte';
 
-  let modal, type, typeValue, sizeValue;
   export const show = () => modal.show();
   export const hide = () => modal.hide();
-
-  let typeList = ['Трусы', 'Колготки', 'Носки', 'Бюстгалтер', 'Трусы', ];
+  
+  let typeList = ["Футболка"];
   let sizeList = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  let modal, type, typeValue = "Трусы", sizeValue = "M";
 
-  const keyActions = {
-    Delete({ list: {focused}, event }) {
-      if (focused !== -1 && event.ctrlKey)
-        return ({dispatch}) => {
-          event.preventDefault();
-          dispatch('delete', {index: focused, value: typeList[focused]});
-          typeList.splice(focused, 1);
-          typeList = typeList;
-        }
-    }
-  }
+  
 
 
 </script>
@@ -30,24 +20,17 @@
     <h1>Добавление товара</h1>
     <Input label="Штрихкод" value="1324768450" />
     <Select
-      { keyActions }
       editable
       label="Наименование"
-      list={typeList}
+      list={ typeList }
       bind:value={ typeValue }
-      on:enter={ () => {
-        console.log(typeList)
-        if (typeValue)
-          typeList = typeList.concat(typeValue);
-        }
-      }
     />
     <Select
-      on:keydown={() => {console.log('keydown')}}
-      label="Размер"
+      editable
       width="50px"
-      value="M"
+      label="Размер"
       list={ sizeList }
+      bind:value={ sizeValue }
     />
 
   </div>
