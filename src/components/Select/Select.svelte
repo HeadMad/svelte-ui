@@ -18,9 +18,9 @@
 
     Delete({ list: {focused}, event }) {
     if (focused !== -1 && event.ctrlKey)
-      return ({ items, dispatch }) => {
+      return (dispatch) => {
         event.preventDefault();
-        dispatch('delete', {index: focused, value: items[focused]});
+        dispatch('delete', {index: focused, value: list[focused]});
       }
   },
 

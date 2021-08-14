@@ -15,7 +15,11 @@ export default {
 
   Enter({ list, event }) {
     list.toggle();
-    if (list.select() === false)
+    if (list.select() === false){
+      list.show();
       return (dispatch) => dispatch('enter', event.target.value);
+    } else {
+      list.hide();
+    }
   },
 };
