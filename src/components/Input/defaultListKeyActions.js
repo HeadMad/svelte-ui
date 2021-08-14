@@ -14,11 +14,8 @@ export default {
   ArrowDown: arrowAction(1),
 
   Enter({ list, event }) {
-    if (list.select() !== false)
-      list.hide();
-    else {
-      list.show();
-      return ({ dispatch }) => dispatch('enter', {value: event.target.value});
-    }
+    list.toggle();
+    if (list.select() === false)
+      return (dispatch) => dispatch('enter', event.target.value);
   },
 };

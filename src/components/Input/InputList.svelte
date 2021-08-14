@@ -2,67 +2,75 @@
   import { getContext, createEventDispatcher } from "svelte";
   import { createEventActions } from './listEventActions.js';
 
-  export let list = [];
+  export let items = [];
   export let keyActions = {};
 
-  const eventActions = createEventActions(keyActions);
-
+  
   let selected = -1;
   let focused = -1;
   let visible = true;
-
+  
   const dispatch = createEventDispatcher();
-  const value = getContext("inputValue");
-  const state = getContext("inputState");
-
-  $: selected = focused = list.indexOf($value);
-
-  export const show = () => visible = true;
-  export const hide = () => visible = false;
-  export const toggle = () => visible = !visible;
-  export const select = (index) => {
-    if (typeof index === "number")
+  const value = getContext('input-value');
+  const state = getContext('input-state');
+  
+  $: selected = focused = items.indexOf($value);
+  
+  const list = {
+    get items() {return items; },
+    get selected() { return selected; },
+    get focused() { return focused; },
+    get visible() { return visible; },
+    
+    show: () => visible = true,
+    hide: () => visible = false,
+    toggle: () => visible = !visible,
+    change: (func) => items = func(items),
+    
+    select(index) {
+      if (typeof index === "number")
       focused = index;
-    if (focused === -1 || selected === focused)
+      if (focused === -1 || selected === focused)
       return false;
-    
-    $value = list[focused];
-    dispatch("select", {index, value: $value});
-    selected = focused;
-    return $value;
-    
+      
+      $value = items[focused];
+      dispatch("select", {index, value: $value});
+      selected = focused;
+      return $value;
+    },
+    offsetFocus(add) {
+      const last = items.length - 1;
+      let newIndex = focused + add;
+      if (newIndex < 0) newIndex = last;
+      if (newIndex > last) newIndex = 0;
+      focused = newIndex;
+      return newIndex;
+    },
   };
-
-  export const offsetFocus = (add) => {
-    const last = list.length - 1;
-    let newIndex = focused + add;
-    if (newIndex < 0) newIndex = last;
-    if (newIndex > last) newIndex = 0;
-    focused = newIndex;
-    return newIndex;
-  };
-
-  state.subscribe(({ name, event }) => {
-    if (name in eventActions) {
-      const listInstance = {
-        hide, show, toggle, select, offsetFocus,
-        visible, focused, selected
-      };
-      const actionResponse = eventActions[name]({ list: listInstance, event });
+  
+  
+  const eventActions = createEventActions(list, keyActions);
+  
+  state.subscribe(({ type, event }) => {
+    if (type in eventActions) {
+      
+      const actionResponse = eventActions[type](event);
       
       if (typeof actionResponse === 'function') 
-        actionResponse({ items: list, dispatch });
+        actionResponse(dispatch);
     }
   });
 </script>
-{#if list.length}
+
+
+{#if items.length}
 <ul
 class="input__list"
 class:input__list_visible={visible}
 >
-  {#each list as item, index}
+  {#each items as item, index}
     <li
-      on:click={ () => select(index) }
+      on:click={ () => list.select(index) }
       class="input__item"
       class:input__item_selected={index === selected}
       class:input__item_focused={index === focused}
@@ -70,7 +78,6 @@ class:input__list_visible={visible}
       <slot
         {item}
         {index}
-        {visible}
 
         focused={index === focused}
         selected={index === selected}

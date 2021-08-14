@@ -1,20 +1,24 @@
-import keyActions from './listKeyActions.js';
+import keyActions from './defaultListKeyActions.js';
 
 
-export const createEventActions = (userKeyActions) => {
+export const createEventActions = (list, userKeyActions) => {
   if (userKeyActions)
     Object.assign(keyActions, userKeyActions);
 
   return {
-    blur({ list }) {
+    init() {
+      list.hide()
+    },
+
+    blur() {
       list.hide();
     },
   
-    click({ list }) {
+    click() {
       list.toggle();
     },
   
-    keydown({ list, event }) {
+    keydown(event) {
       const code = event.code;
       if (code in keyActions)
         return keyActions[code]({ list, event });

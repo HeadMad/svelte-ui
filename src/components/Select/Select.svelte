@@ -6,7 +6,13 @@
   export let editable = false;
   export let list  = [];
   export let label = '';
-  export let width = 'auto';
+
+  $: if (editable === true)
+      delete $$restProps.readonly;
+    else
+      $$restProps.readonly = true;
+
+      console.log($$restProps)
 
   const keyActions = {
 
@@ -20,8 +26,7 @@
 
   }
 
-  function onEnter() {
-    console.log(list);
+  function onEnter({detail: value}) {
     if (value && !list.includes(value))
       list = [value, ...list];
   }
@@ -36,14 +41,13 @@
 </script>
 
 <Input
-  bind:value
   { label }
-  { width }
-  readonly={!editable}
+  bind:value
+  {...$$restProps}
 >
   <InputList
     { keyActions }
-    { list }
+    items={list}
     on:delete={ onDelete }
     on:enter={ onEnter }
     on:select

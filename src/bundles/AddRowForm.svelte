@@ -8,29 +8,25 @@
   
   let typeList = ["Футболка"];
   let sizeList = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-  let modal, type, typeValue = "Трусы", sizeValue = "M";
-
-  
-
+  let modal, typeValue = "Трусы", sizeValue = "M";
 
 </script>
 
 <Modal bind:this={modal} shown="true">
   <div class="module">
     <h1>Добавление товара</h1>
-    <Input label="Штрихкод" value="1324768450" />
+    <Input label="Штрихкод" value="1324768450"/>
     <Select
       editable
       label="Наименование"
       list={ typeList }
-      bind:value={ typeValue }
+      value={ typeValue }
     />
     <Select
-      editable
-      width="50px"
+      size="1"
       label="Размер"
       list={ sizeList }
-      bind:value={ sizeValue }
+      value={ sizeValue }
     />
 
   </div>
@@ -39,6 +35,7 @@
 
 <style>
 
+  :global(.red) {color: red;}
   .module {
     padding: 20px 40px 30px;
     background-color: #fff;
