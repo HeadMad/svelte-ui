@@ -25,6 +25,7 @@
     show: () => visible = true,
     hide: () => visible = false,
     toggle: () => visible = !visible,
+    focus: (i) => focused = i, 
     change: (func) => items = func(items),
     
     select(index) {
@@ -39,10 +40,9 @@
       return $value;
     },
     offsetFocus(add) {
-      const last = items.length - 1;
-      let newIndex = focused + add;
-      if (newIndex < 0) newIndex = last;
-      if (newIndex > last) newIndex = 0;
+      const len = items.length;
+      let newIndex = (focused + add) % len;
+      if (newIndex < 0) newIndex = len + newIndex;
       focused = newIndex;
       return newIndex;
     },

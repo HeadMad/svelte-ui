@@ -1,41 +1,14 @@
 <script>
   import Input from '../Input/Input.svelte';
   import InputList from '../Input/InputList.svelte';
+  import keyActions from './userKeyActions.js';
 
   export let value = '';
-  export let editable = false;
+  export let editable = null;
   export let list  = [];
   export let label = '';
 
-  $: if (editable === true)
-      delete $$restProps.readonly;
-    else
-      $$restProps.readonly = true;
-
-      console.log($$restProps)
-
-  const keyActions = {
-
-    Delete({ list: {focused}, event }) {
-    if (focused !== -1 && event.ctrlKey)
-      return (dispatch) => {
-        event.preventDefault();
-        dispatch('delete', {index: focused, value: list[focused]});
-      }
-  },
-
-  }
-
-  function onEnter({detail: value}) {
-    if (value && !list.includes(value))
-      list = [value, ...list];
-  }
-
-  function onDelete({ detail: {index} }) {
-    list.splice(index, 1);
-    list = list;
-  }
-
+  $: $$restProps.readonly = editable ? true : null;
 
 
 </script>
@@ -48,8 +21,7 @@
   <InputList
     { keyActions }
     items={list}
-    on:delete={ onDelete }
-    on:enter={ onEnter }
     on:select
+    on:enter={() => editable = !editable}
   />
 </Input>
