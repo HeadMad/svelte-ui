@@ -25,6 +25,7 @@
     <Select
       size="1"
       label="Размер"
+      on:save={() => console.log('save')}
       list={ sizeList }
       value={ sizeValue }
     />

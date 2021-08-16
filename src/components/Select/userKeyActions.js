@@ -51,4 +51,12 @@ export default {
     }
   },
 
+
+  KeyS({event}) {
+    if (event.ctrlKey) {
+      event.preventDefault();
+      return dispatch => dispatch('save');
+    }
+  },
+
 }

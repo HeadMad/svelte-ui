@@ -8,7 +8,7 @@
   export let list  = [];
   export let label = '';
 
-  $: $$restProps.readonly = editable ? true : null;
+  $: $$restProps.readonly = editable ? null : true;
 
 
 </script>
@@ -22,6 +22,7 @@
     { keyActions }
     items={list}
     on:select
+    on:save
     on:enter={() => editable = !editable}
   />
 </Input>
