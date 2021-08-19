@@ -74,27 +74,36 @@ function onDrag(event) {
 function dragOver(event) {
 
   const over = event.target;
-  if (over === draggable.parentNode || over === draggable)
+  if (over === this || over === draggable)
     return;
 
   let next = draggable.nextSibling;
-  let method = 'before';
+  let method1 = 'after';
+  let method2 = 'before';
 
   if (!next) {
     next = draggable.previousSibling;
-    method = 'after';
+    method1 = 'before';
+    method2 = 'after';
   }
 
-  over.after(draggable);
-  next[method](over);
+  over[method1](draggable);
+
+  if (next !== over)
+    next[method2](over);
 
 }
 
 function dragEnter(event) {
   const parent = draggable.parentNode
 
-  if (parent !== this)
-  this.append(draggable);
+  if (parent !== this) {
+    if (!this.children.length)
+      this.append(draggable);
+    else if (event.target !== this)
+      event.target.before(draggable);
+  }
+  
 
 
   
