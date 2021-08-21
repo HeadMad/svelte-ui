@@ -1,4 +1,7 @@
-
+:root {
+	--dark: #333;
+	--light: rgb(235, 237, 240);
+}
 
 html, body {
 	position: relative;

@@ -116,13 +116,13 @@ class:input__list_visible={visible}
 
   .input__item_focused,
   .input__item:hover {
-    background: rgb(235, 237, 240);
-    color: #333;
+    background: var(--light);
+    color: var(--dark);
   }
 
   .input__item_selected,
   .input__item_selected:hover {
-    background: #333;
+    background: var(--dark);
     color: #fff;
   }
 </style>

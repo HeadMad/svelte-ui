@@ -22,7 +22,7 @@
 </script>
 
 <label
-class="input"
+class="input{ $$restProps.class ? ' ' + $$restProps.class : '' }"
 >
   <input
   {...$$restProps}
@@ -30,7 +30,8 @@ class="input"
   bind:value={$inputValue}
   bind:this={control}
   
-  class="input__control{ $$restProps.class ? ' ' + $$restProps.class : '' }"
+  autocomplete="off"
+  class="input__control"
   
   on:focus={ changeState }
   on:blur={ changeState }
@@ -56,24 +57,25 @@ class="input"
   .input {
     position: relative;
     display: inline-block;
-    margin: 1em 0 0;
+    padding:  1.2em 0 0;
   }
 
   .input__control {
     width: 100%;
+    margin: 0;
   }
 
   .input__label {
     position: absolute;
     transition: .15s;
     left: 0.4em;
-    top: 0.4em;
+    top: 1.6em;
     color: #777;
   }
 
   .input__control:focus + .input__label,
   .input__label_top {
-    top: -1.4em;
+    top: 0;
     left: 0.5em;
     font-size: 0.8em;
   }
